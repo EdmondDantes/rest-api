@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace IfCastle\RestApi;
 
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 class RouteCollectionBuilder
@@ -23,7 +24,7 @@ class RouteCollectionBuilder
                 $serviceDescriptor  = $this->serviceManager->getServiceDescriptor($serviceName);
                 
                 foreach ($serviceDescriptor->getServiceMethods() as $methodDescriptor) {
-                    $routeDescriptor = $methodDescriptor->findAttribute(Rest::class);
+                    $routeDescriptor = $methodDescriptor->findAttribute(Route::class);
                     
                     if ($routeDescriptor instanceof Rest === false) {
                         continue;
@@ -35,9 +36,8 @@ class RouteCollectionBuilder
                     );
                 }
                 
-                $progressDispatcher?->progressItemEnd($current, $total, Result::ok(), $serviceName);
             } catch (\Throwable $exception) {
-                $progressDispatcher?->progressItemEnd($current, $total, new Result($exception), $serviceName);
+            
             }
         }
     }
