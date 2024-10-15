@@ -31,7 +31,10 @@ final class RequestBuilder
                 throw new ParseException('Failed to parse JSON request body', 0, $exception);
             }
         
-            $requestEnvironment->set(RequestInterface::class, new RestRequest($parameters, $httpRequest->getHeaders()));
+            $requestEnvironment->set(
+                RequestInterface::class,
+                new RestRequest($httpRequest->getUri(), $httpRequest->getMethod(), $parameters, $httpRequest->getHeaders())
+            );
             
         } elseif (in_array($contentType, ['application/x-www-form-urlencoded', 'multipart/form-data', true])) {
             
@@ -44,7 +47,9 @@ final class RequestBuilder
                 $parameters         = array_merge($parameters, $form->post);
             }
             
-            $requestEnvironment->set(RequestInterface::class, new RestRequest($parameters, $httpRequest->getHeaders(), $form?->files ?? []));
+            $requestEnvironment->set(
+                RequestInterface::class,
+                new RestRequest($httpRequest->getUri(), $httpRequest->getMethod(), $parameters, $httpRequest->getHeaders(), $form?->files ?? []));
         }
     }
 }
