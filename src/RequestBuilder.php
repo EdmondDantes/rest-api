@@ -44,7 +44,7 @@ final class RequestBuilder
             $parameters             = $httpRequest->requestParameters();
             
             if($form !== null) {
-                $parameters         = array_merge($parameters, $form->post);
+                $parameters         = array_merge($parameters, $form->post, $form->files);
             }
             
             $requestEnvironment->set(
