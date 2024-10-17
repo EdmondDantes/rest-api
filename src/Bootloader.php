@@ -12,8 +12,8 @@ final class Bootloader implements BootloaderInterface
     public function buildBootloader(BootloaderExecutorInterface $bootloaderExecutor): void
     {
         $bootloaderExecutor->getBootloaderContext()->getRequestEnvironmentPlan()
-                                                   ->addBuildHandler(new RequestBuilder)
                                                    ->addDispatchHandler(new RouterDefaultStrategy)
+                                                   ->addExecuteHandler(new ServiceCallDefaultStrategy)
                                                    ->addResponseHandler(new ResponseDefaultStrategy)
                                                    ->addFinallyHandler(new ErrorDefaultStrategy);
         

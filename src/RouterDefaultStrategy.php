@@ -6,6 +6,8 @@ namespace IfCastle\RestApi;
 use IfCastle\Application\RequestEnvironment\RequestEnvironmentInterface;
 use IfCastle\DesignPatterns\ExecutionPlan\StagePointer;
 use IfCastle\Protocol\Http\HttpRequestInterface;
+use IfCastle\ServiceManager\CommandDescriptorInterface;
+use IfCastle\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RequestContext;
@@ -14,14 +16,9 @@ final class RouterDefaultStrategy
 {
     private RouteCollection|null $routeCollection = null;
     
-    public static function callServiceMethod(string $serviceName, string $methodName, RequestEnvironmentInterface $requestEnvironment): mixed
-    {
-    
-    }
-    
     public function __invoke(RequestEnvironmentInterface $requestEnvironment): StagePointer|null
     {
-        if($requestEnvironment->hasDependency(ActionInterface::class)) {
+        if($requestEnvironment->hasDependency(CommandDescriptorInterface::class)) {
             return new StagePointer(breakCurrent: true);
         }
         
@@ -32,7 +29,7 @@ final class RouterDefaultStrategy
         }
         
         if($this->routeCollection === null) {
-            $this->buildRouteCollection();
+            $this->buildRouteCollection($requestEnvironment);
         }
         
         $attributes                 = (new UrlMatcher($this->routeCollection, $this->defineRequestContext($httpRequest)))
@@ -42,18 +39,22 @@ final class RouterDefaultStrategy
             return null;
         }
         
-        $requestEnvironment->set(ActionInterface::class, new ServiceCall(
-            handler:        self::callServiceMethod(...),
+        $requestEnvironment->set(CommandDescriptorInterface::class, new CommandDescriptor(
             serviceName:    $attributes['service'],
-            serviceMethod:  $attributes['method']
+            methodName:     $attributes['method'],
+            routeAttributes: $attributes,
+            httpRequest:    $httpRequest
         ));
         
         return new StagePointer(breakCurrent: true);
     }
     
-    private function buildRouteCollection(): void
+    private function buildRouteCollection(RequestEnvironmentInterface $requestEnvironment): void
     {
-    
+        $builder                    = new RouteCollectionBuilder;
+        $builder($requestEnvironment->resolveDependency(ServiceLocatorInterface::class));
+        
+        $this->routeCollection      = $builder->getRouteCollection();
     }
     
     private function defineRequestContext(HttpRequestInterface $httpRequest): RequestContext

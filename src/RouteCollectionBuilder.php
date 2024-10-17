@@ -14,14 +14,22 @@ use Symfony\Component\Routing\RouteCollection;
 
 class RouteCollectionBuilder
 {
+    protected RouteCollection $routeCollection;
+    
     public function __invoke(SystemEnvironmentInterface $systemEnvironment): void
     {
         $this->buildRouteCollection($systemEnvironment->resolveDependency(ServiceLocatorInterface::class));
     }
     
+    public function getRouteCollection(): RouteCollection
+    {
+        return $this->routeCollection;
+    }
+    
     protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): void
     {
         $routeCollection            = new RouteCollection();
+        $this->routeCollection      = $routeCollection;
         $serviceList                = $serviceLocator->getServiceList();
         
         foreach ($serviceList as $serviceName) {
