@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-final class RouteCollectionBuilder
+class RouteCollectionBuilder
 {
     public function __construct(
         ServiceLocatorInterface $serviceLocator
@@ -20,7 +20,7 @@ final class RouteCollectionBuilder
         $this->buildRouteCollection($serviceLocator);
     }
     
-    private function buildRouteCollection(ServiceLocatorInterface $serviceLocator): void
+    protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): void
     {
         $routeCollection            = new RouteCollection();
         $serviceList                = $serviceLocator->getServiceList();
@@ -99,20 +99,11 @@ final class RouteCollectionBuilder
         $requirements               = [];
         
         foreach ($methodDescriptor->getArguments() as $parameter) {
-            if(false === $parameter instanceof StringableInterface) {
-                throw new LogicalException([
-                    'template'      => 'The parameter {parameter} of {class}.{method} must have a stringable interface for URL routing',
-                    'parameter'     => $parameter->getName(),
-                    'class'         => $methodDescriptor->getClassName(),
-                    'method'        => $methodDescriptor->getFunctionName(),
-                    'tags'          => ['route']
-                ]);
+            if($parameter instanceof StringableInterface && ($pattern = $parameter->getPattern()) !== null) {
+                $requirements[$parameter->getName()] = $pattern;
             }
-            
-            $requirements[$parameter->getName()] = $parameter->getPattern() ?? '\w+';
         }
         
         return $requirements;
     }
-    
 }
