@@ -26,19 +26,24 @@ final class RouteCollectionBuilder
         $serviceList                = $serviceLocator->getServiceList();
         
         foreach ($serviceList as $serviceName) {
-            $serviceDescriptor  = $serviceLocator->getServiceDescriptor($serviceName);
-            
-            foreach ($serviceDescriptor->getServiceMethods() as $methodDescriptor) {
-                $routeDescriptor = $methodDescriptor->findAttribute(RouteAttribute::class);
+            try {
+                $serviceDescriptor  = $serviceLocator->getServiceDescriptor($serviceName);
                 
-                if ($routeDescriptor instanceof RouteAttribute === false) {
-                    continue;
+                foreach ($serviceDescriptor->getServiceMethods() as $methodDescriptor) {
+                    $routeDescriptor = $methodDescriptor->findAttribute(RouteAttribute::class);
+                    
+                    if ($routeDescriptor instanceof RouteAttribute === false) {
+                        continue;
+                    }
+                    
+                    $routeCollection->add(
+                        $methodDescriptor->getName(),
+                        $this->defineRoute($routeDescriptor, $methodDescriptor, $serviceName)
+                    );
                 }
                 
-                $routeCollection->add(
-                    $methodDescriptor->getName(),
-                    $this->defineRoute($routeDescriptor, $methodDescriptor, $serviceName)
-                );
+            } catch (\Throwable) {
+                // ignore
             }
         }
     }
