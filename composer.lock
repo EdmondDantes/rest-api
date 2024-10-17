@@ -362,16 +362,16 @@
         },
         {
             "name": "ifcastle/type-definitions",
-            "version": "v0.5.9",
+            "version": "v0.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/type-definitions.git",
-                "reference": "6efa5deacade1df297ea23b258e12ac2de15c2bf"
+                "reference": "fa1f1047cfd7c4952eab7d4a95c430939e983523"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/type-definitions/zipball/6efa5deacade1df297ea23b258e12ac2de15c2bf",
-                "reference": "6efa5deacade1df297ea23b258e12ac2de15c2bf",
+                "url": "https://api.github.com/repos/EdmondDantes/type-definitions/zipball/fa1f1047cfd7c4952eab7d4a95c430939e983523",
+                "reference": "fa1f1047cfd7c4952eab7d4a95c430939e983523",
                 "shasum": ""
             },
             "require": {
@@ -404,9 +404,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/type-definitions/issues",
-                "source": "https://github.com/EdmondDantes/type-definitions/tree/v0.5.9"
+                "source": "https://github.com/EdmondDantes/type-definitions/tree/v0.5.10"
             },
-            "time": "2024-09-16T13:22:05+00:00"
+            "time": "2024-10-17T13:19:08+00:00"
         },
         {
             "name": "psr/http-message",
