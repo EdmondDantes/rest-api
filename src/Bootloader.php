@@ -17,6 +17,10 @@ final class Bootloader implements BootloaderInterface
                                                    ->addResponseHandler(new ResponseDefaultStrategy)
                                                    ->addFinallyHandler(new ErrorDefaultStrategy);
         
+        if($bootloaderExecutor->getBootloaderContext()->isWarmUpEnabled()) {
+            $bootloaderExecutor->addWarmUpOperation(new RouteCollectionBuilder);
+        }
+        
         $bootloaderExecutor->getBootloaderContext()->getSystemEnvironmentBootBuilder()
                                                    ->bindConstructible(RouterInterface::class, Router::class);
     }

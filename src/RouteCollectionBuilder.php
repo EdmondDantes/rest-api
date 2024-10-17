@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace IfCastle\RestApi;
 
+use IfCastle\Application\Environment\SystemEnvironmentInterface;
 use IfCastle\Exceptions\LogicalException;
 use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
@@ -13,11 +14,9 @@ use Symfony\Component\Routing\RouteCollection;
 
 class RouteCollectionBuilder
 {
-    public function __construct(
-        ServiceLocatorInterface $serviceLocator
-    )
+    public function __invoke(SystemEnvironmentInterface $systemEnvironment): void
     {
-        $this->buildRouteCollection($serviceLocator);
+        $this->buildRouteCollection($systemEnvironment->resolveDependency(ServiceLocatorInterface::class));
     }
     
     protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): void

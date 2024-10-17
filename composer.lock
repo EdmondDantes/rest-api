@@ -8,22 +8,23 @@
     "packages": [
         {
             "name": "ifcastle/application",
-            "version": "v0.6.19",
+            "version": "v0.6.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/application.git",
-                "reference": "e75696ace62bc9a72106a24b696a04b824603d76"
+                "reference": "6f36234f1461e173fd412fd468032265d8792de9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/e75696ace62bc9a72106a24b696a04b824603d76",
-                "reference": "e75696ace62bc9a72106a24b696a04b824603d76",
+                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/6f36234f1461e173fd412fd468032265d8792de9",
+                "reference": "6f36234f1461e173fd412fd468032265d8792de9",
                 "shasum": ""
             },
             "require": {
                 "ifcastle/async-contracts": "^0.5.0",
                 "ifcastle/design-patterns": "^0.2.20",
                 "ifcastle/di": "^0.6.7",
+                "ifcastle/exceptions": "^5.0",
                 "ifcastle/os-utilities": "^0.5.0",
                 "ifcastle/protocol-contracts": "^0.5.0",
                 "ifcastle/service-manager": "^0.5.7",
@@ -52,9 +53,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/application/issues",
-                "source": "https://github.com/EdmondDantes/application/tree/v0.6.19"
+                "source": "https://github.com/EdmondDantes/application/tree/v0.6.21"
             },
-            "time": "2024-10-15T12:01:26+00:00"
+            "time": "2024-10-17T15:28:22+00:00"
         },
         {
             "name": "ifcastle/async-contracts",
