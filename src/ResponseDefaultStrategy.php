@@ -46,14 +46,13 @@ class ResponseDefaultStrategy
             throw (new UnexpectedValueType('$response', $response, HttpResponseMutableInterface::class))->markAsFatal();
         }
         
-        $requestEnvironment->defineResponse($response);
-        
         if($result instanceof \Throwable) {
             $this->buildErrorResponse($result, $response);
-            return;
+        } else {
+            $this->buildResponseByResult($result, $response);
         }
-
-        $this->buildResponseByResult($result, $response);
+        
+        $requestEnvironment->defineResponse($response);
     }
     
     protected function buildResponseByResult(mixed $result, HttpResponseMutableInterface $response): void
