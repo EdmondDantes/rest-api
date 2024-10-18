@@ -94,16 +94,16 @@
         },
         {
             "name": "ifcastle/design-patterns",
-            "version": "v0.2.25",
+            "version": "v0.2.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/design-patterns.git",
-                "reference": "b343a920a46fd6d73c5bac215e0baba5d0d5d700"
+                "reference": "bf7add084e16d71073d94aeb879a1f90feb2960c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/design-patterns/zipball/b343a920a46fd6d73c5bac215e0baba5d0d5d700",
-                "reference": "b343a920a46fd6d73c5bac215e0baba5d0d5d700",
+                "url": "https://api.github.com/repos/EdmondDantes/design-patterns/zipball/bf7add084e16d71073d94aeb879a1f90feb2960c",
+                "reference": "bf7add084e16d71073d94aeb879a1f90feb2960c",
                 "shasum": ""
             },
             "require": {
@@ -133,9 +133,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/design-patterns/issues",
-                "source": "https://github.com/EdmondDantes/design-patterns/tree/v0.2.25"
+                "source": "https://github.com/EdmondDantes/design-patterns/tree/v0.2.26"
             },
-            "time": "2024-10-15T16:19:39+00:00"
+            "time": "2024-10-18T13:02:25+00:00"
         },
         {
             "name": "ifcastle/di",
@@ -278,20 +278,21 @@
         },
         {
             "name": "ifcastle/protocol-contracts",
-            "version": "v0.5.9",
+            "version": "v0.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/protocol-contracts.git",
-                "reference": "18c662d04ee7043526f4cecb3c923e7106bfc156"
+                "reference": "f9fc3e30ebcb90d0671f85a0bdf82aa8346d6810"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/protocol-contracts/zipball/18c662d04ee7043526f4cecb3c923e7106bfc156",
-                "reference": "18c662d04ee7043526f4cecb3c923e7106bfc156",
+                "url": "https://api.github.com/repos/EdmondDantes/protocol-contracts/zipball/f9fc3e30ebcb90d0671f85a0bdf82aa8346d6810",
+                "reference": "f9fc3e30ebcb90d0671f85a0bdf82aa8346d6810",
                 "shasum": ""
             },
             "require": {
                 "ifcastle/async-contracts": "^0.5.0",
+                "ifcastle/design-patterns": "^0.2.26",
                 "ifcastle/di": "^0.6.8",
                 "ifcastle/exceptions": "^5.0",
                 "psr/http-message": "^2.0"
@@ -313,9 +314,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/protocol-contracts/issues",
-                "source": "https://github.com/EdmondDantes/protocol-contracts/tree/v0.5.9"
+                "source": "https://github.com/EdmondDantes/protocol-contracts/tree/v0.5.14"
             },
-            "time": "2024-10-15T16:52:02+00:00"
+            "time": "2024-10-18T14:55:28+00:00"
         },
         {
             "name": "ifcastle/service-manager",
