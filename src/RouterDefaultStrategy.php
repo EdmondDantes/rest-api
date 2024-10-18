@@ -7,7 +7,6 @@ use IfCastle\Application\RequestEnvironment\RequestEnvironmentInterface;
 use IfCastle\DesignPatterns\ExecutionPlan\StagePointer;
 use IfCastle\Protocol\Http\HttpRequestInterface;
 use IfCastle\ServiceManager\CommandDescriptorInterface;
-use IfCastle\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RequestContext;
@@ -16,20 +15,20 @@ final class RouterDefaultStrategy
 {
     private RouteCollection|null $routeCollection = null;
     
-    public function __invoke(RequestEnvironmentInterface $requestEnvironment): StagePointer|null
+    public function __invoke(RequestEnvironmentInterface $container): StagePointer|null
     {
-        if($requestEnvironment->hasDependency(CommandDescriptorInterface::class)) {
+        if($container->hasDependency(CommandDescriptorInterface::class)) {
             return new StagePointer(breakCurrent: true);
         }
         
-        $httpRequest                = $requestEnvironment->findDependency(HttpRequestInterface::class);
+        $httpRequest                = $container->findDependency(HttpRequestInterface::class);
         
         if($httpRequest === null) {
             return null;
         }
         
         if($this->routeCollection === null) {
-            $this->buildRouteCollection($requestEnvironment);
+            $this->buildRouteCollection($container);
         }
         
         $attributes                 = (new UrlMatcher($this->routeCollection, $this->defineRequestContext($httpRequest)))
@@ -39,7 +38,7 @@ final class RouterDefaultStrategy
             return null;
         }
         
-        $requestEnvironment->set(CommandDescriptorInterface::class, new CommandDescriptor(
+        $container->set(CommandDescriptorInterface::class, new CommandDescriptor(
             serviceName:    $attributes['service'],
             methodName:     $attributes['method'],
             routeAttributes: $attributes,
@@ -51,10 +50,17 @@ final class RouterDefaultStrategy
     
     private function buildRouteCollection(RequestEnvironmentInterface $requestEnvironment): void
     {
-        $builder                    = new RouteCollectionBuilder;
-        $builder($requestEnvironment->resolveDependency(ServiceLocatorInterface::class));
+        $routerCollection           = $requestEnvironment->findDependency(RouteCollection::class);
         
-        $this->routeCollection      = $builder->getRouteCollection();
+        if($routerCollection instanceof RouteCollection) {
+            $this->routeCollection  = $routerCollection;
+            return;
+        }
+        
+        $builder                    = new RouteCollectionBuilder;
+        $builder($requestEnvironment->getSystemEnvironment());
+        
+        $this->routeCollection      = $requestEnvironment->resolveDependency(RouteCollection::class);
     }
     
     private function defineRequestContext(HttpRequestInterface $httpRequest): RequestContext

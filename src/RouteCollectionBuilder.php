@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace IfCastle\RestApi;
 
-use IfCastle\Application\Environment\SystemEnvironmentInterface;
+use IfCastle\DI\ContainerMutableInterface;
 use IfCastle\Exceptions\LogicalException;
 use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
@@ -14,22 +14,22 @@ use Symfony\Component\Routing\RouteCollection;
 
 class RouteCollectionBuilder
 {
-    protected RouteCollection $routeCollection;
-    
-    public function __invoke(SystemEnvironmentInterface $systemEnvironment): void
+    public function __invoke(ContainerMutableInterface $systemEnvironment): void
     {
-        $this->buildRouteCollection($systemEnvironment->resolveDependency(ServiceLocatorInterface::class));
+        $routeCollection            = $systemEnvironment->findDependency(RouteCollection::class);
+        
+        if($routeCollection instanceof RouteCollection) {
+            return;
+        }
+        
+        $systemEnvironment->set(
+            RouteCollection::class, $this->buildRouteCollection($systemEnvironment->resolveDependency(ServiceLocatorInterface::class))
+        );
     }
     
-    public function getRouteCollection(): RouteCollection
-    {
-        return $this->routeCollection;
-    }
-    
-    protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): void
+    protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): RouteCollection
     {
         $routeCollection            = new RouteCollection();
-        $this->routeCollection      = $routeCollection;
         $serviceList                = $serviceLocator->getServiceList();
         
         foreach ($serviceList as $serviceName) {
@@ -53,6 +53,8 @@ class RouteCollectionBuilder
                 // ignore
             }
         }
+        
+        return $routeCollection;
     }
     
     /**

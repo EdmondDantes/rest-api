@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ifcastle/application",
-            "version": "v0.6.21",
+            "version": "v0.6.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/application.git",
-                "reference": "6f36234f1461e173fd412fd468032265d8792de9"
+                "reference": "bbd96efa73ac4476aa138b682b196066893b7046"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/6f36234f1461e173fd412fd468032265d8792de9",
-                "reference": "6f36234f1461e173fd412fd468032265d8792de9",
+                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/bbd96efa73ac4476aa138b682b196066893b7046",
+                "reference": "bbd96efa73ac4476aa138b682b196066893b7046",
                 "shasum": ""
             },
             "require": {
@@ -53,9 +53,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/application/issues",
-                "source": "https://github.com/EdmondDantes/application/tree/v0.6.21"
+                "source": "https://github.com/EdmondDantes/application/tree/v0.6.22"
             },
-            "time": "2024-10-17T15:28:22+00:00"
+            "time": "2024-10-18T18:40:27+00:00"
         },
         {
             "name": "ifcastle/async-contracts",
@@ -2682,16 +2682,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "fa37b9e2ca618cb051d71b60120952ee8ca8b03d"
+                "reference": "5ef523a49ae7a302b87b2102b72b1eda8918d686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/fa37b9e2ca618cb051d71b60120952ee8ca8b03d",
-                "reference": "fa37b9e2ca618cb051d71b60120952ee8ca8b03d",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/5ef523a49ae7a302b87b2102b72b1eda8918d686",
+                "reference": "5ef523a49ae7a302b87b2102b72b1eda8918d686",
                 "shasum": ""
             },
             "require": {
@@ -2747,7 +2747,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/6.1.0"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/6.1.1"
             },
             "funding": [
                 {
@@ -2755,7 +2755,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-11T15:42:56+00:00"
+            "time": "2024-10-18T15:00:48+00:00"
         },
         {
             "name": "sebastian/complexity",
