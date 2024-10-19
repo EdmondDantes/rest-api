@@ -42,13 +42,13 @@ final class RouterDefaultStrategy
         $attributes                 = (new UrlMatcher($this->routeCollection, $this->defineRequestContext($httpRequest)))
             ->match($httpRequest->getUri()->getPath());
         
-        if(empty($attributes['service']) || empty($attributes['method'])) {
+        if(empty($attributes['_service']) || empty($attributes['_method'])) {
             return null;
         }
         
         $requestEnvironment->set(CommandDescriptorInterface::class, new CommandDescriptor(
-            serviceName:    $attributes['service'],
-            methodName:     $attributes['method'],
+            serviceName:    $attributes['_service'] ?? '',
+            methodName:     $attributes['_method'] ?? '',
             extractParameters:  new WeakStaticHandler(static fn(self $self) => $self->extractParameters($requestEnvironment, $attributes), $this)
         ));
         
@@ -91,8 +91,8 @@ final class RouterDefaultStrategy
      */
     private function extractParameters(RequestEnvironmentInterface $requestEnvironment, array $attributes): array
     {
-        $serviceName               = $attributes['service'] ?? '';
-        $methodName                = $attributes['method'] ?? '';
+        $serviceName               = $attributes['_service'] ?? '';
+        $methodName                = $attributes['_method'] ?? '';
         
         $httpRequest               = $requestEnvironment->resolveDependency(HttpRequestInterface::class);
         

@@ -8,9 +8,10 @@ use IfCastle\Exceptions\LogicalException;
 use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
 use IfCastle\TypeDefinitions\StringableInterface;
-use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
+use IfCastle\RestApi\Route as RouteAttribute;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouteCompiler;
 
 class RouteCollectionBuilder
 {
@@ -37,15 +38,15 @@ class RouteCollectionBuilder
                 $serviceDescriptor  = $serviceLocator->getServiceDescriptor($serviceName);
                 
                 foreach ($serviceDescriptor->getServiceMethods() as $methodDescriptor) {
-                    $routeDescriptor = $methodDescriptor->findAttribute(RouteAttribute::class);
+                    $routeAttribute = $methodDescriptor->findAttribute(RouteAttribute::class);
                     
-                    if ($routeDescriptor instanceof RouteAttribute === false) {
+                    if ($routeAttribute instanceof RouteAttribute === false) {
                         continue;
                     }
                     
                     $routeCollection->add(
                         $methodDescriptor->getName(),
-                        $this->defineRoute($routeDescriptor, $methodDescriptor, $serviceName)
+                        $this->defineRoute($routeAttribute, $methodDescriptor, $serviceName)
                     );
                 }
                 
@@ -62,16 +63,10 @@ class RouteCollectionBuilder
      */
     protected function defineRoute(RouteAttribute $routeAttribute, FunctionDescriptorInterface $methodDescriptor, string $serviceName): Route
     {
-        $defaults                   = $routeAttribute->getDefaults();
-        
-        if(empty($defaults)) {
-            $defaults               = $this->defineDefaults($methodDescriptor);
-        }
-        
         $route                      = new Route(
             $routeAttribute->getPath(),
-            $defaults,
-            $this->defineRequirements($methodDescriptor),
+            [],
+            [],
             $routeAttribute->getOptions(),
             $routeAttribute->getHost(),
             $routeAttribute->getSchemes(),
@@ -79,40 +74,51 @@ class RouteCollectionBuilder
             $routeAttribute->getCondition()
         );
         
+        $parameters                 = RouteCompiler::compile($route)->getPathVariables();
+        $requirements               = [];
+        $founded                    = [];
+        
+        foreach ($methodDescriptor->getArguments() as $parameter) {
+            
+            $name                   = $parameter->getName();
+            
+            if(in_array($name, $parameters, true) === false) {
+                continue;
+            }
+            
+            if(false === $parameter instanceof StringableInterface) {
+                throw new LogicalException([
+                    'template'      => 'Route parameter {parameter} for {service}->{method} must implement StringableInterface',
+                    'parameter'     => $name,
+                    'service'       => $serviceName,
+                    'method'        => $methodDescriptor->getFunctionName()
+                ]);
+            }
+            
+            if(($pattern = $parameter->getPattern()) !== null) {
+                $requirements[$name] = $pattern;
+            }
+            
+            $founded[]              = $name;
+        }
+        
+        if(count($founded) !== count($parameters)) {
+            throw new LogicalException([
+                'template'          => 'Route parameters {parameters} for {service}->{method} are not defined in the method arguments',
+                'parameters'        => implode(', ', array_diff($parameters, $founded)),
+                'service'           => $serviceName,
+                'method'            => $methodDescriptor->getFunctionName()
+            ]);
+        }
+        
+        $route->setRequirements($requirements);
+        
+        // add information about service and method
         $route->addDefaults([
-            'service'               => $serviceName,
-            'method'                => $methodDescriptor->getFunctionName()
+            '_service'              => $serviceName,
+            '_method'               => $methodDescriptor->getFunctionName()
         ]);
         
         return $route;
-    }
-    
-    protected function defineDefaults(FunctionDescriptorInterface $methodDescriptor): array
-    {
-        $defaults                   = [];
-        
-        foreach ($methodDescriptor->getArguments() as $parameter) {
-            if($parameter->isDefaultValueAvailable()) {
-                $defaults[$parameter->getName()] = $parameter->getDefaultValue();
-            }
-        }
-        
-        return $defaults;
-    }
-    
-    /**
-     * @throws LogicalException
-     */
-    protected function defineRequirements(FunctionDescriptorInterface $methodDescriptor): array
-    {
-        $requirements               = [];
-        
-        foreach ($methodDescriptor->getArguments() as $parameter) {
-            if($parameter instanceof StringableInterface && ($pattern = $parameter->getPattern()) !== null) {
-                $requirements[$parameter->getName()] = $pattern;
-            }
-        }
-        
-        return $requirements;
     }
 }
