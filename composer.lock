@@ -278,16 +278,16 @@
         },
         {
             "name": "ifcastle/protocol-contracts",
-            "version": "v0.5.14",
+            "version": "v0.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/protocol-contracts.git",
-                "reference": "f9fc3e30ebcb90d0671f85a0bdf82aa8346d6810"
+                "reference": "eae87d7d2cd9a4f72636fc90f51dc92ed237e304"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/protocol-contracts/zipball/f9fc3e30ebcb90d0671f85a0bdf82aa8346d6810",
-                "reference": "f9fc3e30ebcb90d0671f85a0bdf82aa8346d6810",
+                "url": "https://api.github.com/repos/EdmondDantes/protocol-contracts/zipball/eae87d7d2cd9a4f72636fc90f51dc92ed237e304",
+                "reference": "eae87d7d2cd9a4f72636fc90f51dc92ed237e304",
                 "shasum": ""
             },
             "require": {
@@ -314,9 +314,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/protocol-contracts/issues",
-                "source": "https://github.com/EdmondDantes/protocol-contracts/tree/v0.5.14"
+                "source": "https://github.com/EdmondDantes/protocol-contracts/tree/v0.5.15"
             },
-            "time": "2024-10-18T14:55:28+00:00"
+            "time": "2024-10-19T07:08:05+00:00"
         },
         {
             "name": "ifcastle/service-manager",

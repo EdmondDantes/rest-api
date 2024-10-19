@@ -3,22 +3,20 @@ declare(strict_types=1);
 
 namespace IfCastle\RestApi;
 
-use IfCastle\Protocol\Http\HttpRequestInterface;
 use IfCastle\ServiceManager\CommandDescriptorInterface;
 
 class CommandDescriptor implements CommandDescriptorInterface
 {
     protected array|null $parameters = null;
-    protected \WeakReference|null $httpRequest = null;
+    protected mixed $extractParameters = null;
     
     public function __construct(
         public readonly string $serviceName,
         public readonly string $methodName,
-        public readonly array $routeAttributes,
-        HttpRequestInterface $httpRequest
+        callable $extractParameters
     )
     {
-        $this->httpRequest          = \WeakReference::create($httpRequest);
+        $this->extractParameters    = $extractParameters;
     }
     
     #[\Override]
@@ -49,14 +47,12 @@ class CommandDescriptor implements CommandDescriptorInterface
     public function getParameters(): array
     {
         if($this->parameters === null) {
-            $this->parameters = $this->extractParameters();
+            $this->parameters       = [];
+            $extractParameters      = $this->extractParameters;
+            $this->extractParameters = null;
+            $this->parameters       = $extractParameters();
         }
         
         return $this->parameters;
-    }
-    
-    protected function extractParameters(): array
-    {
-        return $this->httpRequest->getParameters();
     }
 }
