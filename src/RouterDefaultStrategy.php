@@ -161,8 +161,6 @@ final class RouterDefaultStrategy
         
         $normalizedParameters       = [];
         
-        $parameters                = $this->parseParameters($httpRequest);
-        
         foreach ($methodDescriptor->getArguments() as $parameter)
         {
             if($parameter->findAttribute(FromEnv::class) !== null) {
