@@ -15,13 +15,12 @@ use IfCastle\ServiceManager\CommandDescriptorInterface;
 use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FromEnv;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 
 final class RouterDefaultStrategy
 {
-    private RouteCollection|null $routeCollection = null;
+    private CompiledRouteCollection|null $routeCollection = null;
     
     public function __invoke(RequestEnvironmentInterface $requestEnvironment): StagePointer|null
     {
@@ -39,7 +38,7 @@ final class RouterDefaultStrategy
             $this->buildRouteCollection($requestEnvironment);
         }
         
-        $attributes                 = (new UrlMatcher($this->routeCollection, $this->defineRequestContext($httpRequest)))
+        $attributes                 = (new CompiledUrlMatcher($this->routeCollection->collection, $this->defineRequestContext($httpRequest)))
             ->match($httpRequest->getUri()->getPath());
         
         if(empty($attributes['_service']) || empty($attributes['_method'])) {
@@ -47,8 +46,8 @@ final class RouterDefaultStrategy
         }
         
         $requestEnvironment->set(CommandDescriptorInterface::class, new CommandDescriptor(
-            serviceName:    $attributes['_service'] ?? '',
-            methodName:     $attributes['_method'] ?? '',
+            serviceName:    $attributes['_service'],
+            methodName:     $attributes['_method'],
             extractParameters:  new WeakStaticHandler(static fn(self $self) => $self->extractParameters($requestEnvironment, $attributes), $this)
         ));
         
@@ -57,9 +56,9 @@ final class RouterDefaultStrategy
     
     private function buildRouteCollection(RequestEnvironmentInterface $requestEnvironment): void
     {
-        $routerCollection           = $requestEnvironment->findDependency(RouteCollection::class);
+        $routerCollection           = $requestEnvironment->findDependency(CompiledRouteCollection::class);
         
-        if($routerCollection instanceof RouteCollection) {
+        if($routerCollection instanceof CompiledRouteCollection) {
             $this->routeCollection  = $routerCollection;
             return;
         }
@@ -67,7 +66,7 @@ final class RouterDefaultStrategy
         $builder                    = new RouteCollectionBuilder;
         $builder($requestEnvironment->getSystemEnvironment());
         
-        $this->routeCollection      = $requestEnvironment->resolveDependency(RouteCollection::class);
+        $this->routeCollection      = $requestEnvironment->resolveDependency(CompiledRouteCollection::class);
     }
     
     private function defineRequestContext(HttpRequestInterface $httpRequest): RequestContext

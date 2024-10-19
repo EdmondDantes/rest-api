@@ -9,6 +9,7 @@ use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
 use IfCastle\TypeDefinitions\StringableInterface;
 use IfCastle\RestApi\Route as RouteAttribute;
+use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouteCompiler;
@@ -24,8 +25,15 @@ class RouteCollectionBuilder
         }
         
         $systemEnvironment->set(
-            RouteCollection::class, $this->buildRouteCollection($systemEnvironment->resolveDependency(ServiceLocatorInterface::class))
+            CompiledRouteCollection::class, $this->compile(
+                $this->buildRouteCollection($systemEnvironment->resolveDependency(ServiceLocatorInterface::class))
+            )
         );
+    }
+    
+    protected function compile(RouteCollection $routeCollection): CompiledRouteCollection
+    {
+        return new CompiledRouteCollection((new CompiledUrlMatcherDumper($routeCollection))->getCompiledRoutes());
     }
     
     protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): RouteCollection
