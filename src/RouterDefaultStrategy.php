@@ -6,21 +6,26 @@ namespace IfCastle\RestApi;
 use IfCastle\Application\RequestEnvironment\RequestEnvironmentInterface;
 use IfCastle\DesignPatterns\ExecutionPlan\StagePointer;
 use IfCastle\DesignPatterns\Handler\WeakStaticHandler;
+use IfCastle\DesignPatterns\Interceptor\InterceptorPipeline;
+use IfCastle\DesignPatterns\Interceptor\InterceptorRegistryInterface;
 use IfCastle\DI\Exceptions\DependencyNotFound;
 use IfCastle\Exceptions\UnexpectedValueType;
 use IfCastle\Protocol\Exceptions\ParseException;
 use IfCastle\Protocol\HeadersInterface;
+use IfCastle\Protocol\Http\HttpRequestForm;
 use IfCastle\Protocol\Http\HttpRequestInterface;
 use IfCastle\ServiceManager\CommandDescriptorInterface;
 use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FromEnv;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
+use Psr\Http\Message\UriInterface;
 use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 
-final class RouterDefaultStrategy
+class RouterDefaultStrategy
 {
-    private CompiledRouteCollection|null $routeCollection = null;
+    protected CompiledRouteCollection|null $routeCollection = null;
+    protected array|null $interceptors = null;
     
     public function __invoke(RequestEnvironmentInterface $requestEnvironment): StagePointer|null
     {
@@ -54,7 +59,7 @@ final class RouterDefaultStrategy
         return new StagePointer(breakCurrent: true);
     }
     
-    private function buildRouteCollection(RequestEnvironmentInterface $requestEnvironment): void
+    protected function buildRouteCollection(RequestEnvironmentInterface $requestEnvironment): void
     {
         $routerCollection           = $requestEnvironment->findDependency(CompiledRouteCollection::class);
         
@@ -69,7 +74,7 @@ final class RouterDefaultStrategy
         $this->routeCollection      = $requestEnvironment->resolveDependency(CompiledRouteCollection::class);
     }
     
-    private function defineRequestContext(HttpRequestInterface $httpRequest): RequestContext
+    protected function defineRequestContext(HttpRequestInterface $httpRequest): RequestContext
     {
         $uri                        = $httpRequest->getUri();
         
@@ -88,7 +93,7 @@ final class RouterDefaultStrategy
      * @throws DependencyNotFound
      * @throws UnexpectedValueType
      */
-    private function extractParameters(RequestEnvironmentInterface $requestEnvironment, array $attributes): array
+    protected function extractParameters(RequestEnvironmentInterface $requestEnvironment, array $attributes): array
     {
         $serviceName               = $attributes['_service'] ?? '';
         $methodName                = $attributes['_method'] ?? '';
@@ -97,6 +102,10 @@ final class RouterDefaultStrategy
         
         if(false === $httpRequest instanceof HttpRequestInterface) {
             throw new UnexpectedValueType('$httpRequest', $httpRequest, HttpRequestInterface::class);
+        }
+        
+        if($this->interceptors === null) {
+            $this->buildInterceptors($requestEnvironment);
         }
         
         $methodDescriptor          = $requestEnvironment->findDependency(ServiceLocatorInterface::class)
@@ -162,11 +171,25 @@ final class RouterDefaultStrategy
         
         foreach ($methodDescriptor->getArguments() as $parameter)
         {
+            $name                   = $parameter->getName();
+            
+            //
+            // Apply interceptors if exists
+            //
+            if($this->interceptors !== []) {
+                $result             = (new InterceptorPipeline(
+                    $this, [$parameter, $methodDescriptor, $parameters, $requestEnvironment], ...$this->interceptors)
+                )->getResult();
+                
+                if($result !== null) {
+                    $normalizedParameters[$name] = $result;
+                    continue;
+                }
+            }
+            
             if($parameter->findAttribute(FromEnv::class) !== null) {
                 continue;
             }
-            
-            $name                   = $parameter->getName();
             
             if($parameter->findAttribute(RequestBody::class) !== null) {
                 $normalizedParameters[$name] = $httpRequest->getBody();
@@ -183,6 +206,19 @@ final class RouterDefaultStrategy
                 continue;
             }
             
+            // Resolve parameter by type
+            $result                 = match ($parameter->getTypeName()) {
+                UriInterface::class => $httpRequest->getUri(),
+                HttpRequestInterface::class, HeadersInterface::class => $httpRequest,
+                HttpRequestForm::class => $httpRequest->retrieveRequestForm(),
+                default => null,
+            };
+            
+            if($result !== null) {
+                $normalizedParameters[$name] = $result;
+                continue;
+            }
+            
             if(array_key_exists($name, $parameters)) {
                 $normalizedParameters[$name] = $parameters[$name];
             }
@@ -194,7 +230,7 @@ final class RouterDefaultStrategy
     /**
      * @throws ParseException
      */
-    private function parseParameters(HttpRequestInterface $httpRequest): array
+    protected function parseParameters(HttpRequestInterface $httpRequest): array
     {
         // Try to parse parameters from the request
         $contentType                = $httpRequest->getHeader(HeadersInterface::CONTENT_TYPE)[0] ?? '';
@@ -236,5 +272,18 @@ final class RouterDefaultStrategy
         }
         
         throw new ParseException('Failed to parse request parameters: unknown content type');
+    }
+    
+    protected function buildInterceptors(RequestEnvironmentInterface $requestEnvironment): void
+    {
+        $this->interceptors      = [];
+        
+        $interceptors               = $requestEnvironment->getSystemEnvironment()
+                                                        ?->findDependency(InterceptorRegistryInterface::class)
+                                                        ?->resolveInterceptors(ExtractParameterInterface::class);
+        
+        if($interceptors !== null) {
+            $this->interceptors  = $interceptors;
+        }
     }
 }
