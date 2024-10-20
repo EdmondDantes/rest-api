@@ -8,7 +8,7 @@ use IfCastle\Exceptions\LogicalException;
 use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
 use IfCastle\TypeDefinitions\StringableInterface;
-use IfCastle\RestApi\Route as RouteAttribute;
+use IfCastle\RestApi\Rest as RouteAttribute;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -44,6 +44,7 @@ class RouteCollectionBuilder
         foreach ($serviceList as $serviceName) {
             try {
                 $serviceDescriptor  = $serviceLocator->getServiceDescriptor($serviceName);
+                $groupRoute         = $serviceDescriptor->findAttribute(RouteAttribute::class);
                 
                 foreach ($serviceDescriptor->getServiceMethods() as $methodDescriptor) {
                     $routeAttribute = $methodDescriptor->findAttribute(RouteAttribute::class);
@@ -54,7 +55,7 @@ class RouteCollectionBuilder
                     
                     $routeCollection->add(
                         $methodDescriptor->getName(),
-                        $this->defineRoute($routeAttribute, $methodDescriptor, $serviceName)
+                        $this->defineRoute($routeAttribute, $groupRoute, $methodDescriptor, $serviceName)
                     );
                 }
                 
@@ -69,17 +70,43 @@ class RouteCollectionBuilder
     /**
      * @throws LogicalException
      */
-    protected function defineRoute(RouteAttribute $routeAttribute, FunctionDescriptorInterface $methodDescriptor, string $serviceName): Route
+    protected function defineRoute(
+        RouteAttribute $routeAttribute,
+        RouteAttribute|null $groupRoute,
+        FunctionDescriptorInterface $methodDescriptor,
+        string $serviceName
+    ): Route
     {
+        $path                       = $routeAttribute->getPath();
+        $defaults                   = $routeAttribute->getDefaults();
+        $requirements               = $routeAttribute->getRequirements();
+        $options                    = $routeAttribute->getOptions();
+        $host                       = $routeAttribute->getHost();
+        $schemes                    = $routeAttribute->getSchemes();
+        $methods                    = $routeAttribute->getMethods();
+        $condition                  = $routeAttribute->getCondition();
+        
+        // Inherit group route attributes
+        if($groupRoute instanceof RouteAttribute) {
+            $path                   = $groupRoute->getPath() . $path;
+            $defaults               = array_merge($groupRoute->getDefaults(), $defaults);
+            $requirements           = array_merge($groupRoute->getRequirements(), $requirements);
+            $options                = array_merge($groupRoute->getOptions(), $options);
+            $host                   = $groupRoute->getHost() ?? $host;
+            $schemes                = $groupRoute->getSchemes() ?? $schemes;
+            $methods                = $groupRoute->getMethods() ?? $methods;
+            $condition              = $groupRoute->getCondition() ?? $condition;
+        }
+        
         $route                      = new Route(
-            $routeAttribute->getPath(),
-            [],
-            [],
-            $routeAttribute->getOptions(),
-            $routeAttribute->getHost(),
-            $routeAttribute->getSchemes(),
-            $routeAttribute->getMethods(),
-            $routeAttribute->getCondition()
+            $path,
+            $defaults,
+            $requirements,
+            $options,
+            $host,
+            $schemes,
+            $methods,
+            $condition
         );
         
         $parameters                 = RouteCompiler::compile($route)->getPathVariables();
