@@ -63,6 +63,8 @@ class ResponseDefaultStrategy
             $this->applyMimeType($response);
         }
         
+        $response->setStatusCode(200);
+        
         if($result === null) {
             return;
         }
@@ -155,8 +157,14 @@ class ResponseDefaultStrategy
         }
     }
     
-    protected function applyMimeType(HttpResponseMutableInterface $response, string $mimeType = null): void
+    protected function applyMimeType(HttpResponseMutableInterface $response, string $mimeType = null, string $charset = null): void
     {
-        $response->setHeader(HeadersInterface::CONTENT_TYPE, $mimeType ?? HeadersInterface::MIME_APPLICATION_JSON. '; charset=utf-8');
+        $response->setHeader(HeadersInterface::CONTENT_TYPE, $mimeType ?? HeadersInterface::MIME_APPLICATION_JSON);
+        
+        if($mimeType === null && $charset === null) {
+            $response->setHeader(HeadersInterface::CONTENT_TYPE, 'charset=utf-8');
+        } elseif ($charset !== null) {
+            $response->setHeader(HeadersInterface::CONTENT_TYPE, 'charset=' . $charset);
+        }
     }
 }

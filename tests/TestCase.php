@@ -9,6 +9,9 @@ use IfCastle\Application\RequestEnvironment\RequestEnvironment;
 use IfCastle\DI\Resolver;
 use IfCastle\Protocol\HeadersInterface;
 use IfCastle\Protocol\Http\HttpRequestInterface;
+use IfCastle\Protocol\Http\HttpResponseMutableInterface;
+use IfCastle\Protocol\ResponseFactoryInterface;
+use IfCastle\RestApi\Mocks\HttpResponse;
 use IfCastle\ServiceManager\DescriptorRepository;
 use IfCastle\ServiceManager\RepositoryStorages\RepositoryReaderInterface;
 use IfCastle\ServiceManager\ServiceDescriptorBuilderByReflection;
@@ -26,6 +29,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $this->systemEnvironment?->dispose();
         $this->systemEnvironment = null;
+    }
+    
+    protected function assignResponseFactory(RequestEnvironment $requestEnvironment): void
+    {
+        $responseFactory            = $this->createMock(ResponseFactoryInterface::class);
+        $responseFactory->method('createResponse')->willReturn(new HttpResponse);
+        $requestEnvironment->set(ResponseFactoryInterface::class, $responseFactory);
     }
     
     protected function buildRequestEnvironment(
@@ -57,6 +67,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         
         $env                        = new RequestEnvironment($httpRequest, parentContainer: $systemEnvironment);
         $env->set(HttpRequestInterface::class, $httpRequest);
+        
+        $this->assignResponseFactory($env);
         
         return $env;
     }
