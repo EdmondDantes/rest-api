@@ -178,7 +178,7 @@ class RouterDefaultStrategy
             //
             if($this->interceptors !== []) {
                 $result             = (new InterceptorPipeline(
-                    $this, [$parameter, $methodDescriptor, $parameters, $requestEnvironment], ...$this->interceptors)
+                    $this, [$parameter, $methodDescriptor, $parameters, $attributes, $requestEnvironment], ...$this->interceptors)
                 )->getResult();
                 
                 if($result !== null) {
@@ -211,7 +211,7 @@ class RouterDefaultStrategy
                 UriInterface::class => $httpRequest->getUri(),
                 HttpRequestInterface::class, HeadersInterface::class => $httpRequest,
                 HttpRequestForm::class => $httpRequest->retrieveRequestForm(),
-                default => null,
+                default             => null,
             };
             
             if($result !== null) {
@@ -219,7 +219,11 @@ class RouterDefaultStrategy
                 continue;
             }
             
-            if(array_key_exists($name, $parameters)) {
+            // First, we check if the parameter is in the router parameters
+            if(array_key_exists($name, $attributes)) {
+                $normalizedParameters[$name] = $attributes[$name];
+            } elseif(array_key_exists($name, $parameters)) {
+                // Then we check if the parameter is in the request parameters
                 $normalizedParameters[$name] = $parameters[$name];
             }
         }
