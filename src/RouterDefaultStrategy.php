@@ -243,6 +243,10 @@ class RouterDefaultStrategy
             
             $body                   = $httpRequest->getBody();
             
+            if($body === '') {
+                return [];
+            }
+            
             try {
                 $parameters         = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
             } catch (\JsonException $exception) {
