@@ -21,6 +21,6 @@ class Rest                          extends \Symfony\Component\Routing\Attribute
     #[\Override]
     public function getAttributeName(): string
     {
-        return 'Rest';
+        return static::class;
     }
 }

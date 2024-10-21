@@ -14,6 +14,6 @@ final readonly class FromGet implements AttributeNameInterface
     #[\Override]
     public function getAttributeName(): string
     {
-        return 'FromGet';
+        return self::class;
     }
 }

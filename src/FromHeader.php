@@ -14,6 +14,6 @@ final readonly class FromHeader     implements AttributeNameInterface
     #[\Override]
     public function getAttributeName(): string
     {
-        return 'FromHeader';
+        return self::class;
     }
 }

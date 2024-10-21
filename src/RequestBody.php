@@ -10,11 +10,11 @@ use IfCastle\TypeDefinitions\NativeSerialization\AttributeNameInterface;
 final readonly class RequestBody implements AttributeNameInterface
 {
     public function __construct(
-        public readonly array $mimeTypes = [],
+        public array $mimeTypes = [],
     ) {}
     
     public function getAttributeName(): string
     {
-        return 'RequestBody';
+        return self::class;
     }
 }
