@@ -3,16 +3,6 @@ declare(strict_types=1);
 
 namespace IfCastle\RestApi;
 
-use IfCastle\Application\Environment\SystemEnvironment;
-use IfCastle\DI\ContainerMutableInterface;
-use IfCastle\DI\Resolver;
-use IfCastle\ServiceManager\DescriptorRepository;
-use IfCastle\ServiceManager\RepositoryStorages\RepositoryReaderInterface;
-use IfCastle\ServiceManager\ServiceDescriptorBuilderByReflection;
-use IfCastle\ServiceManager\ServiceLocator;
-use IfCastle\ServiceManager\ServiceLocatorInterface;
-use IfCastle\TypeDefinitions\Resolver\ExplicitTypeResolver;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 
@@ -53,29 +43,5 @@ class RouteCollectionBuilderTest    extends TestCase
         $this->assertEquals('methodWithUuid', $result['_route'], 'Route not found');
         $this->assertArrayHasKey('uuid', $result, 'Parameter uuid is not found');
         $this->assertEquals('123e4567-e89b-12d3-a456-426614174000', $result['uuid'], 'Parameter uuid is not equal to 123e4567-e89b-12d3-a456-426614174000');
-    }
-    
-    protected function buildSystemEnvironment(): ContainerMutableInterface
-    {
-        $serviceConfig              = [
-            'class'                 => SomeService::class,
-            'isActive'              => true
-        ];
-        
-        $repositoryReader           = $this->createMock(RepositoryReaderInterface::class);
-        $repositoryReader->method('getServicesConfig')->willReturn(['someService' => $serviceConfig]);
-        $repositoryReader->method('findServiceConfig')->willReturn($serviceConfig);
-        
-        $container                  = [];
-        $descriptorRepository       = new DescriptorRepository(
-            $repositoryReader,
-            new ExplicitTypeResolver,
-            new ServiceDescriptorBuilderByReflection
-        );
-        
-        $container[DescriptorRepository::class] = $descriptorRepository;
-        $container[ServiceLocatorInterface::class] = new ServiceLocator($descriptorRepository);
-        
-        return new SystemEnvironment(new Resolver, $container);
     }
 }
