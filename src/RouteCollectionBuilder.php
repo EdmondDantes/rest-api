@@ -107,7 +107,7 @@ class RouteCollectionBuilder
             $condition
         );
         
-        $parameters                 = RouteCompiler::compile($route)->getPathVariables();
+        $parameters                 = RouteCompiler::compile($route)->getVariables();
         $requirements               = [];
         $founded                    = [];
         

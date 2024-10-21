@@ -94,16 +94,16 @@
         },
         {
             "name": "ifcastle/design-patterns",
-            "version": "v0.2.27",
+            "version": "v0.2.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/design-patterns.git",
-                "reference": "0a1b2550df1ea366314c7a1fb446a1275526b534"
+                "reference": "09c0cc067839bb2180074edfd5c12fa40236d837"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/design-patterns/zipball/0a1b2550df1ea366314c7a1fb446a1275526b534",
-                "reference": "0a1b2550df1ea366314c7a1fb446a1275526b534",
+                "url": "https://api.github.com/repos/EdmondDantes/design-patterns/zipball/09c0cc067839bb2180074edfd5c12fa40236d837",
+                "reference": "09c0cc067839bb2180074edfd5c12fa40236d837",
                 "shasum": ""
             },
             "require": {
@@ -133,9 +133,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/design-patterns/issues",
-                "source": "https://github.com/EdmondDantes/design-patterns/tree/v0.2.27"
+                "source": "https://github.com/EdmondDantes/design-patterns/tree/v0.2.28"
             },
-            "time": "2024-10-20T09:58:55+00:00"
+            "time": "2024-10-20T12:42:08+00:00"
         },
         {
             "name": "ifcastle/di",
@@ -320,19 +320,20 @@
         },
         {
             "name": "ifcastle/service-manager",
-            "version": "v0.5.10",
+            "version": "v0.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/service-manager.git",
-                "reference": "154f4a45707ad6b6bd9710a6bdf9ae0f35074cb3"
+                "reference": "36c44bf334d6d2dfc3e35a7895a1c946ca1e42ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/service-manager/zipball/154f4a45707ad6b6bd9710a6bdf9ae0f35074cb3",
-                "reference": "154f4a45707ad6b6bd9710a6bdf9ae0f35074cb3",
+                "url": "https://api.github.com/repos/EdmondDantes/service-manager/zipball/36c44bf334d6d2dfc3e35a7895a1c946ca1e42ed",
+                "reference": "36c44bf334d6d2dfc3e35a7895a1c946ca1e42ed",
                 "shasum": ""
             },
             "require": {
+                "ifcastle/design-patterns": "^0.2.27",
                 "ifcastle/di": "^0.6.0",
                 "ifcastle/exceptions": "^5.0",
                 "ifcastle/type-definitions": "^0.5.0"
@@ -358,22 +359,22 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/service-manager/issues",
-                "source": "https://github.com/EdmondDantes/service-manager/tree/v0.5.10"
+                "source": "https://github.com/EdmondDantes/service-manager/tree/v0.5.11"
             },
-            "time": "2024-10-12T10:06:20+00:00"
+            "time": "2024-10-21T08:44:52+00:00"
         },
         {
             "name": "ifcastle/type-definitions",
-            "version": "v0.5.10",
+            "version": "v0.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/type-definitions.git",
-                "reference": "fa1f1047cfd7c4952eab7d4a95c430939e983523"
+                "reference": "a80e4c806d49f38bfd7b843faccb889711a97935"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/type-definitions/zipball/fa1f1047cfd7c4952eab7d4a95c430939e983523",
-                "reference": "fa1f1047cfd7c4952eab7d4a95c430939e983523",
+                "url": "https://api.github.com/repos/EdmondDantes/type-definitions/zipball/a80e4c806d49f38bfd7b843faccb889711a97935",
+                "reference": "a80e4c806d49f38bfd7b843faccb889711a97935",
                 "shasum": ""
             },
             "require": {
@@ -406,9 +407,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/type-definitions/issues",
-                "source": "https://github.com/EdmondDantes/type-definitions/tree/v0.5.10"
+                "source": "https://github.com/EdmondDantes/type-definitions/tree/v0.5.14"
             },
-            "time": "2024-10-17T13:19:08+00:00"
+            "time": "2024-10-21T09:19:02+00:00"
         },
         {
             "name": "psr/http-message",
