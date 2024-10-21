@@ -44,6 +44,15 @@ class RouteCollectionBuilderTest    extends TestCase
         $this->assertEquals('someService', $result['_service'], 'Parameter _service is not equal to someService');
         $this->assertArrayHasKey('_method', $result, 'Parameter _method is not found');
         $this->assertEquals('someMethod', $result['_method'], 'Parameter _method is not equal to someMethod');
+        
+        // Test UUID parameter
+        $result                     = $compiledUrlMatcher->match('/base/method-with-uuid/123e4567-e89b-12d3-a456-426614174000');
+        
+        $this->assertIsArray($result, 'Route not found');
+        $this->assertArrayHasKey('_route', $result, 'Route not found');
+        $this->assertEquals('methodWithUuid', $result['_route'], 'Route not found');
+        $this->assertArrayHasKey('uuid', $result, 'Parameter uuid is not found');
+        $this->assertEquals('123e4567-e89b-12d3-a456-426614174000', $result['uuid'], 'Parameter uuid is not equal to 123e4567-e89b-12d3-a456-426614174000');
     }
     
     protected function buildSystemEnvironment(): ContainerMutableInterface
