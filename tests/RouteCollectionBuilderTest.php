@@ -30,9 +30,14 @@ class RouteCollectionBuilderTest    extends TestCase
     
     protected function buildSystemEnvironment(): ContainerMutableInterface
     {
+        $serviceConfig              = [
+            'class'                 => SomeService::class,
+            'isActive'              => true
+        ];
+        
         $repositoryReader           = $this->createMock(RepositoryReaderInterface::class);
-        $repositoryReader->method('getServicesConfig')->willReturn([]);
-        $repositoryReader->method('findServiceConfig')->willReturn([]);
+        $repositoryReader->method('getServicesConfig')->willReturn(['someService' => $serviceConfig]);
+        $repositoryReader->method('findServiceConfig')->willReturn($serviceConfig);
         
         $container                  = [];
         $descriptorRepository       = new DescriptorRepository(

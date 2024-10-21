@@ -18,9 +18,9 @@ class RouteCollectionBuilder
 {
     public function __invoke(ContainerMutableInterface $systemEnvironment): void
     {
-        $routeCollection            = $systemEnvironment->findDependency(RouteCollection::class);
+        $routeCollection            = $systemEnvironment->findDependency(CompiledRouteCollection::class);
         
-        if($routeCollection instanceof RouteCollection) {
+        if($routeCollection instanceof CompiledRouteCollection) {
             return;
         }
         
@@ -39,11 +39,9 @@ class RouteCollectionBuilder
     protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): RouteCollection
     {
         $routeCollection            = new RouteCollection();
-        $serviceList                = $serviceLocator->getServiceList();
         
-        foreach ($serviceList as $serviceName) {
+        foreach ($serviceLocator->getServiceDescriptorList() as $serviceName => $serviceDescriptor) {
             try {
-                $serviceDescriptor  = $serviceLocator->getServiceDescriptor($serviceName);
                 $groupRoute         = $serviceDescriptor->findAttribute(RouteAttribute::class);
                 
                 foreach ($serviceDescriptor->getServiceMethods() as $methodDescriptor) {
