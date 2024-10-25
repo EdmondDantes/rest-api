@@ -11,7 +11,7 @@
     "extra": {
         "ifcastle-installer": {
             "package": {
-                "name": "rest-api",
+                "name": "rest_api",
                 "bootloaders": [
                     "IfCastle\\RestApi\\Bootloader"
                 ]
