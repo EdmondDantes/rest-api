@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\RestApi;
@@ -15,18 +16,18 @@ final class SomeService
     {
         return 'Hello, World!';
     }
-    
+
     #[AsServiceMethod]
     #[Rest('/method-with-uuid/{uuid}', methods: Rest::GET)]
     public function methodWithUuid(ValueUuid $uuid, string $extraParameter): string
     {
-        return $uuid->getValue().'::'.$extraParameter;
+        return $uuid->getValue() . '::' . $extraParameter;
     }
-    
+
     #[AsServiceMethod]
     #[Rest('/method-with-integer-parameter/{id}', methods: Rest::GET)]
     public function methodWithIntegerParameter(int $id, string $optionalParameter = 'default'): string
     {
-        return $id.'::'.$optionalParameter;
+        return $id . '::' . $optionalParameter;
     }
 }

@@ -1,14 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\RestApi;
 
 use IfCastle\DI\ContainerMutableInterface;
 use IfCastle\Exceptions\LogicalException;
+use IfCastle\RestApi\Rest as RouteAttribute;
 use IfCastle\ServiceManager\ServiceLocatorInterface;
 use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
 use IfCastle\TypeDefinitions\StringableInterface;
-use IfCastle\RestApi\Rest as RouteAttribute;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -19,52 +20,52 @@ class RouteCollectionBuilder
     public function __invoke(ContainerMutableInterface $systemEnvironment): void
     {
         $routeCollection            = $systemEnvironment->findDependency(CompiledRouteCollection::class);
-        
-        if($routeCollection instanceof CompiledRouteCollection) {
+
+        if ($routeCollection instanceof CompiledRouteCollection) {
             return;
         }
-        
+
         $systemEnvironment->set(
             CompiledRouteCollection::class, $this->compile(
                 $this->buildRouteCollection($systemEnvironment->resolveDependency(ServiceLocatorInterface::class))
             )
         );
     }
-    
+
     protected function compile(RouteCollection $routeCollection): CompiledRouteCollection
     {
         return new CompiledRouteCollection((new CompiledUrlMatcherDumper($routeCollection))->getCompiledRoutes());
     }
-    
+
     protected function buildRouteCollection(ServiceLocatorInterface $serviceLocator): RouteCollection
     {
         $routeCollection            = new RouteCollection();
-        
+
         foreach ($serviceLocator->getServiceDescriptorList() as $serviceName => $serviceDescriptor) {
             try {
                 $groupRoute         = $serviceDescriptor->findAttribute(RouteAttribute::class);
-                
+
                 foreach ($serviceDescriptor->getServiceMethods() as $methodDescriptor) {
                     $routeAttribute = $methodDescriptor->findAttribute(RouteAttribute::class);
-                    
+
                     if ($routeAttribute instanceof RouteAttribute === false) {
                         continue;
                     }
-                    
+
                     $routeCollection->add(
                         $methodDescriptor->getName(),
                         $this->defineRoute($routeAttribute, $groupRoute, $methodDescriptor, $serviceName)
                     );
                 }
-                
+
             } catch (\Throwable) {
                 // ignore
             }
         }
-        
+
         return $routeCollection;
     }
-    
+
     /**
      * @throws LogicalException
      */
@@ -73,8 +74,7 @@ class RouteCollectionBuilder
         RouteAttribute|null $groupRoute,
         FunctionDescriptorInterface $methodDescriptor,
         string $serviceName
-    ): Route
-    {
+    ): Route {
         $path                       = $routeAttribute->getPath();
         $defaults                   = $routeAttribute->getDefaults();
         $requirements               = $routeAttribute->getRequirements();
@@ -83,19 +83,19 @@ class RouteCollectionBuilder
         $schemes                    = $routeAttribute->getSchemes();
         $methods                    = $routeAttribute->getMethods();
         $condition                  = $routeAttribute->getCondition();
-        
+
         // Inherit group route attributes
-        if($groupRoute instanceof RouteAttribute) {
+        if ($groupRoute instanceof RouteAttribute) {
             $path                   = $groupRoute->getPath() . $path;
-            $defaults               = array_merge($groupRoute->getDefaults(), $defaults);
-            $requirements           = array_merge($groupRoute->getRequirements(), $requirements);
-            $options                = array_merge($groupRoute->getOptions(), $options);
+            $defaults               = \array_merge($groupRoute->getDefaults(), $defaults);
+            $requirements           = \array_merge($groupRoute->getRequirements(), $requirements);
+            $options                = \array_merge($groupRoute->getOptions(), $options);
             $host                   = $groupRoute->getHost() ?? $host;
             $schemes                = $groupRoute->getSchemes() ?? $schemes;
             $methods                = $groupRoute->getMethods() ?? $methods;
             $condition              = $groupRoute->getCondition() ?? $condition;
         }
-        
+
         $route                      = new Route(
             $path,
             $defaults,
@@ -106,52 +106,52 @@ class RouteCollectionBuilder
             $methods,
             $condition
         );
-        
+
         $parameters                 = RouteCompiler::compile($route)->getVariables();
         $requirements               = [];
         $founded                    = [];
-        
+
         foreach ($methodDescriptor->getArguments() as $parameter) {
-            
+
             $name                   = $parameter->getName();
-            
-            if(in_array($name, $parameters, true) === false) {
+
+            if (\in_array($name, $parameters, true) === false) {
                 continue;
             }
-            
-            if(false === $parameter instanceof StringableInterface) {
+
+            if (false === $parameter instanceof StringableInterface) {
                 throw new LogicalException([
                     'template'      => 'Route parameter {parameter} for {service}->{method} must implement StringableInterface',
                     'parameter'     => $name,
                     'service'       => $serviceName,
-                    'method'        => $methodDescriptor->getFunctionName()
+                    'method'        => $methodDescriptor->getFunctionName(),
                 ]);
             }
-            
-            if(($pattern = $parameter->getPattern()) !== null) {
+
+            if (($pattern = $parameter->getPattern()) !== null) {
                 $requirements[$name] = $pattern;
             }
-            
+
             $founded[]              = $name;
         }
-        
-        if(count($founded) !== count($parameters)) {
+
+        if (\count($founded) !== \count($parameters)) {
             throw new LogicalException([
                 'template'          => 'Route parameters {parameters} for {service}->{method} are not defined in the method arguments',
-                'parameters'        => implode(', ', array_diff($parameters, $founded)),
+                'parameters'        => \implode(', ', \array_diff($parameters, $founded)),
                 'service'           => $serviceName,
-                'method'            => $methodDescriptor->getFunctionName()
+                'method'            => $methodDescriptor->getFunctionName(),
             ]);
         }
-        
+
         $route->setRequirements($requirements);
-        
+
         // add information about service and method
         $route->addDefaults([
             '_service'              => $serviceName,
-            '_method'               => $methodDescriptor->getFunctionName()
+            '_method'               => $methodDescriptor->getFunctionName(),
         ]);
-        
+
         return $route;
     }
 }

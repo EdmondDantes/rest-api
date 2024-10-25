@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\RestApi;
@@ -10,7 +11,7 @@ use IfCastle\TypeDefinitions\NativeSerialization\AttributeNameInterface;
 final readonly class FromGet implements AttributeNameInterface
 {
     public function __construct(public string|null $name = null) {}
-    
+
     #[\Override]
     public function getAttributeName(): string
     {

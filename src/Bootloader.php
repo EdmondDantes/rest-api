@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\RestApi;
@@ -12,15 +13,15 @@ final class Bootloader implements BootloaderInterface
     public function buildBootloader(BootloaderExecutorInterface $bootloaderExecutor): void
     {
         $bootloaderExecutor->getBootloaderContext()->getRequestEnvironmentPlan()
-                                                   ->addDispatchHandler(new RouterDefaultStrategy)
-                                                   ->addExecuteHandler(new ServiceCallDefaultStrategy)
-                                                   ->addResponseHandler(new ResponseDefaultStrategy)
-                                                   ->addFinallyHandler(new ErrorDefaultStrategy);
-        
-        if($bootloaderExecutor->getBootloaderContext()->isWarmUpEnabled()) {
-            $bootloaderExecutor->addWarmUpOperation(new RouteCollectionBuilder);
+                                                   ->addDispatchHandler(new RouterDefaultStrategy())
+                                                   ->addExecuteHandler(new ServiceCallDefaultStrategy())
+                                                   ->addResponseHandler(new ResponseDefaultStrategy())
+                                                   ->addFinallyHandler(new ErrorDefaultStrategy());
+
+        if ($bootloaderExecutor->getBootloaderContext()->isWarmUpEnabled()) {
+            $bootloaderExecutor->addWarmUpOperation(new RouteCollectionBuilder());
         }
-        
+
         $bootloaderExecutor->getBootloaderContext()->getSystemEnvironmentBootBuilder()
                                                    ->bindConstructible(RouterInterface::class, Router::class);
     }

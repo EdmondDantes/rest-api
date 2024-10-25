@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\RestApi;
@@ -12,7 +13,7 @@ final readonly class RequestBody implements AttributeNameInterface
     public function __construct(
         public array $mimeTypes = [],
     ) {}
-    
+
     public function getAttributeName(): string
     {
         return self::class;

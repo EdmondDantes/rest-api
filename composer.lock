@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d9c43c6fec426953be0d69ddd9a5deb",
+    "content-hash": "8671af552e0e124c27c1d2e2efb4f013",
     "packages": [
         {
             "name": "ifcastle/application",
-            "version": "v0.6.22",
+            "version": "v0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/application.git",
-                "reference": "bbd96efa73ac4476aa138b682b196066893b7046"
+                "reference": "f45ca567740e4d0154b39754a6a5f25af86a6f08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/bbd96efa73ac4476aa138b682b196066893b7046",
-                "reference": "bbd96efa73ac4476aa138b682b196066893b7046",
+                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/f45ca567740e4d0154b39754a6a5f25af86a6f08",
+                "reference": "f45ca567740e4d0154b39754a6a5f25af86a6f08",
                 "shasum": ""
             },
             "require": {
@@ -31,8 +31,8 @@
                 "psr/log": "^3.0"
             },
             "require-dev": {
-                "amphp/php-cs-fixer-config": "^2.1",
                 "friendsofphp/php-cs-fixer": "^3.60",
+                "ifcastle/codestyle": "^0.1.1",
                 "phpunit/phpunit": "^11.3"
             },
             "type": "library",
@@ -53,22 +53,22 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/application/issues",
-                "source": "https://github.com/EdmondDantes/application/tree/v0.6.22"
+                "source": "https://github.com/EdmondDantes/application/tree/v0.7.2"
             },
-            "time": "2024-10-18T18:40:27+00:00"
+            "time": "2024-10-25T19:14:16+00:00"
         },
         {
             "name": "ifcastle/async-contracts",
-            "version": "v0.5.0",
+            "version": "v0.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/async-contracts.git",
-                "reference": "b4bd347b5a1ff55490b2715e9fec3db4853e0871"
+                "reference": "6c805d33dfad69e844271a7e15501bd8fc255cc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/async-contracts/zipball/b4bd347b5a1ff55490b2715e9fec3db4853e0871",
-                "reference": "b4bd347b5a1ff55490b2715e9fec3db4853e0871",
+                "url": "https://api.github.com/repos/EdmondDantes/async-contracts/zipball/6c805d33dfad69e844271a7e15501bd8fc255cc4",
+                "reference": "6c805d33dfad69e844271a7e15501bd8fc255cc4",
                 "shasum": ""
             },
             "type": "library",
@@ -88,9 +88,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/async-contracts/issues",
-                "source": "https://github.com/EdmondDantes/async-contracts/tree/v0.5.0"
+                "source": "https://github.com/EdmondDantes/async-contracts/tree/v0.5.6"
             },
-            "time": "2024-10-12T12:14:18+00:00"
+            "time": "2024-10-23T07:06:32+00:00"
         },
         {
             "name": "ifcastle/design-patterns",
@@ -320,16 +320,16 @@
         },
         {
             "name": "ifcastle/service-manager",
-            "version": "v0.5.11",
+            "version": "v0.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/service-manager.git",
-                "reference": "36c44bf334d6d2dfc3e35a7895a1c946ca1e42ed"
+                "reference": "2569eb63718f20454a4d0a15ffcc8c8e9096ce07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/service-manager/zipball/36c44bf334d6d2dfc3e35a7895a1c946ca1e42ed",
-                "reference": "36c44bf334d6d2dfc3e35a7895a1c946ca1e42ed",
+                "url": "https://api.github.com/repos/EdmondDantes/service-manager/zipball/2569eb63718f20454a4d0a15ffcc8c8e9096ce07",
+                "reference": "2569eb63718f20454a4d0a15ffcc8c8e9096ce07",
                 "shasum": ""
             },
             "require": {
@@ -359,9 +359,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/service-manager/issues",
-                "source": "https://github.com/EdmondDantes/service-manager/tree/v0.5.11"
+                "source": "https://github.com/EdmondDantes/service-manager/tree/v0.5.14"
             },
-            "time": "2024-10-21T08:44:52+00:00"
+            "time": "2024-10-25T10:28:58+00:00"
         },
         {
             "name": "ifcastle/type-definitions",
@@ -664,60 +664,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "amphp/php-cs-fixer-config",
-            "version": "v2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/amphp/php-cs-fixer-config.git",
-                "reference": "0fad9ec6a10a0a58fbf8cb77f41da34f80c031d6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/amphp/php-cs-fixer-config/zipball/0fad9ec6a10a0a58fbf8cb77f41da34f80c031d6",
-                "reference": "0fad9ec6a10a0a58fbf8cb77f41da34f80c031d6",
-                "shasum": ""
-            },
-            "require": {
-                "friendsofphp/php-cs-fixer": "^3.5",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Amp\\CodeStyle\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Niklas Keller",
-                    "email": "me@kelunik.com"
-                },
-                {
-                    "name": "Sascha-Oliver Prolic",
-                    "email": "saschaprolic@googlemail.com"
-                }
-            ],
-            "description": "Code style config for AMPHP.",
-            "support": {
-                "issues": "https://github.com/amphp/php-cs-fixer-config/issues",
-                "source": "https://github.com/amphp/php-cs-fixer-config/tree/v2.1.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/amphp",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-04-19T02:16:09+00:00"
-        },
         {
             "name": "clue/ndjson-react",
             "version": "v1.3.0",
@@ -1218,6 +1164,45 @@
                 }
             ],
             "time": "2024-08-30T23:09:38+00:00"
+        },
+        {
+            "name": "ifcastle/codestyle",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EdmondDantes/ifcastle-codestyle.git",
+                "reference": "1b191dc5443c4cf2f39a80a78df8a42add922710"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EdmondDantes/ifcastle-codestyle/zipball/1b191dc5443c4cf2f39a80a78df8a42add922710",
+                "reference": "1b191dc5443c4cf2f39a80a78df8a42add922710",
+                "shasum": ""
+            },
+            "require": {
+                "friendsofphp/php-cs-fixer": "^3.64",
+                "php": ">=8.3"
+            },
+            "type": "codestyle",
+            "autoload": {
+                "psr-4": {
+                    "IfCastle\\CodeStyle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "CodeStyle",
+            "keywords": [
+                "Codestyle",
+                "ifcastle"
+            ],
+            "support": {
+                "issues": "https://github.com/EdmondDantes/ifcastle-codestyle/issues",
+                "source": "https://github.com/EdmondDantes/ifcastle-codestyle/tree/v0.1.1"
+            },
+            "time": "2024-10-25T12:57:40+00:00"
         },
         {
             "name": "myclabs/deep-copy",

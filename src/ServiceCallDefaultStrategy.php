@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\RestApi;
@@ -25,50 +26,50 @@ final class ServiceCallDefaultStrategy
     public function __invoke(RequestEnvironmentInterface $requestEnvironment): void
     {
         $commandDescriptor          = $requestEnvironment->findDependency(CommandDescriptorInterface::class);
-        
-        if($commandDescriptor instanceof CommandDescriptorInterface === false) {
+
+        if ($commandDescriptor instanceof CommandDescriptorInterface === false) {
             return;
         }
-        
+
         $executor                   = $requestEnvironment->resolveDependency(ExecutorInterface::class);
-        
-        if($executor instanceof ExecutorInterface === false) {
+
+        if ($executor instanceof ExecutorInterface === false) {
             throw new UnexpectedValueType('$executor', $executor, ExecutorInterface::class);
         }
-        
+
         try {
             $result                 = $executor->executeCommand($commandDescriptor);
         } catch (\Throwable $exception) {
             $requestEnvironment->set(ResultInterface::class, new Result(error: $exception));
             return;
         }
-        
+
         //
         // The Result can be a ReadableStreamInterface,
         //
-        if($result instanceof ReadableStreamInterface) {
+        if ($result instanceof ReadableStreamInterface) {
             $requestEnvironment->set(ResultInterface::class, new Result(result: $result));
             return;
         }
-        
+
         //
         // otherwise, it should be a ValueContainerInterface
         //
-        if(false === $result instanceof ValueContainerInterface) {
+        if (false === $result instanceof ValueContainerInterface) {
             $result                 = new ValueContainer($result, $this->extractReturnType($requestEnvironment, $commandDescriptor));
         }
-        
+
         $requestEnvironment->set(ResultInterface::class, new Result($result));
     }
-    
+
     private function extractReturnType(RequestEnvironmentInterface $requestEnvironment, CommandDescriptorInterface $commandDescriptor): DefinitionInterface
     {
         $serviceLocator             = $requestEnvironment->resolveDependency(ServiceLocatorInterface::class);
-        
-        if($serviceLocator instanceof ServiceLocatorInterface === false) {
+
+        if ($serviceLocator instanceof ServiceLocatorInterface === false) {
             throw new UnexpectedValueType('$serviceLocator', $serviceLocator, ServiceLocatorInterface::class);
         }
-        
+
         return $serviceLocator->getServiceDescriptor($commandDescriptor->getServiceName())
                               ->getServiceMethod($commandDescriptor->getMethodName())
                               ->getReturnType();
