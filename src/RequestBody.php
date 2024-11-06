@@ -14,6 +14,7 @@ final readonly class RequestBody implements AttributeNameInterface
         public array $mimeTypes = [],
     ) {}
 
+    #[\Override]
     public function getAttributeName(): string
     {
         return self::class;

@@ -13,7 +13,9 @@ class HttpResponse implements HttpResponseMutableInterface
     use HeadersMutableTrait;
 
     protected int $statusCode = 200;
+    
     protected string $reasonPhrase = 'OK';
+    
     protected string|ReadableStreamInterface $body = '';
 
     #[\Override]

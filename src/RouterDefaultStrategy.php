@@ -26,6 +26,7 @@ use Symfony\Component\Routing\RequestContext;
 class RouterDefaultStrategy
 {
     protected CompiledRouteCollection|null $routeCollection = null;
+    
     protected array|null $interceptors = null;
 
     public function __invoke(RequestEnvironmentInterface $requestEnvironment): StagePointer|null
@@ -268,7 +269,7 @@ class RouterDefaultStrategy
 
             if ($json !== '') {
                 try {
-                    $parameters     = \json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                    $parameters     = \json_decode((string) $json, true, 512, JSON_THROW_ON_ERROR);
                 } catch (\JsonException $exception) {
                     throw new ParseException('Failed to parse JSON parameter', 0, $exception);
                 }
@@ -285,8 +286,7 @@ class RouterDefaultStrategy
     {
         $this->interceptors      = [];
 
-        $interceptors               = $requestEnvironment->getSystemEnvironment()
-                                                        ?->findDependency(InterceptorRegistryInterface::class)
+        $interceptors               = $requestEnvironment->getSystemEnvironment()->findDependency(InterceptorRegistryInterface::class)
                                                         ?->resolveInterceptors(ExtractParameterInterface::class);
 
         if ($interceptors !== null) {

@@ -6,7 +6,7 @@ namespace IfCastle\RestApi;
 
 use Symfony\Component\Routing\RouteCollection;
 
-final class Router implements RouterInterface
+final readonly class Router implements RouterInterface
 {
     private RouteCollection $routeCollection;
 
