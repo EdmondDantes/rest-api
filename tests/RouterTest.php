@@ -6,12 +6,12 @@ namespace IfCastle\RestApi;
 
 use IfCastle\ServiceManager\CommandDescriptorInterface;
 
-class RouterDefaultStrategyTest extends TestCase
+class RouterTest extends TestCase
 {
     public function testRouter(): void
     {
         $requestEnvironment         = $this->buildRequestEnvironment('/base/some-method/some-string');
-        $routerDefaultStrategy      = new RouterDefaultStrategy();
+        $routerDefaultStrategy      = new Router();
 
         $routerDefaultStrategy($requestEnvironment);
 

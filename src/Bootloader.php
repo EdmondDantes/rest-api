@@ -12,8 +12,10 @@ final class Bootloader implements BootloaderInterface
     #[\Override]
     public function buildBootloader(BootloaderExecutorInterface $bootloaderExecutor): void
     {
+        $router                     = new Router();
+
         $bootloaderExecutor->getBootloaderContext()->getRequestEnvironmentPlan()
-                                                   ->addDispatchHandler(new RouterDefaultStrategy())
+                                                   ->addDispatchHandler($router)
                                                    ->addExecuteHandler(new ServiceCallDefaultStrategy())
                                                    ->addResponseHandler(new ResponseDefaultStrategy())
                                                    ->addFinallyHandler(new ErrorDefaultStrategy());
@@ -23,6 +25,6 @@ final class Bootloader implements BootloaderInterface
         }
 
         $bootloaderExecutor->getBootloaderContext()->getSystemEnvironmentBootBuilder()
-                                                   ->bindConstructible(RouterInterface::class, Router::class);
+                                                   ->bindObject(RouterInterface::class, $router);
     }
 }

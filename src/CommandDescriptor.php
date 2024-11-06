@@ -9,7 +9,7 @@ use IfCastle\ServiceManager\CommandDescriptorInterface;
 class CommandDescriptor implements CommandDescriptorInterface
 {
     protected array|null $parameters = null;
-    
+
     protected mixed $extractParameters = null;
 
     public function __construct(

@@ -11,17 +11,17 @@ use IfCastle\TypeDefinitions\NativeSerialization\AttributeNameInterface;
 class Rest extends \Symfony\Component\Routing\Attribute\Route implements AttributeNameInterface
 {
     public const string GET          = 'GET';
-    
+
     public const string POST         = 'POST';
-    
+
     public const string PUT          = 'PUT';
-    
+
     public const string DELETE       = 'DELETE';
-    
+
     public const string PATCH        = 'PATCH';
-    
+
     public const string OPTIONS      = 'OPTIONS';
-    
+
     public const string HEAD         = 'HEAD';
 
     #[\Override]

@@ -106,7 +106,7 @@ class ResponseDefaultStrategy
         if ($result instanceof ReadableStreamInterface) {
             return $result;
         }
-        
+
         throw (new HttpException([
             'template'      => 'Response has not allowed type. Got: {type}. Expected: {expected}',
             'code'          => 500,
