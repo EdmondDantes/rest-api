@@ -14,6 +14,9 @@
                 "name": "rest_api",
                 "bootloaders": [
                     "IfCastle\\RestApi\\Bootloader"
+                ],
+                "tags": [
+                    "rest_api"
                 ]
             }
         }
