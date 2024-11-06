@@ -7,6 +7,7 @@ namespace IfCastle\RestApi;
 use IfCastle\Application\RequestEnvironment\RequestEnvironmentInterface;
 use IfCastle\DesignPatterns\ExecutionPlan\StagePointer;
 use IfCastle\DesignPatterns\Handler\WeakStaticHandler;
+use IfCastle\DesignPatterns\Interceptor\InterceptorInterface;
 use IfCastle\DesignPatterns\Interceptor\InterceptorPipeline;
 use IfCastle\DesignPatterns\Interceptor\InterceptorRegistryInterface;
 use IfCastle\DI\Exceptions\DependencyNotFound;
@@ -27,6 +28,9 @@ class Router implements RouterInterface
 {
     protected CompiledRouteCollection|null $routeCollection = null;
 
+    /**
+     * @var InterceptorInterface<object>[]|null
+     */
     protected array|null $interceptors = null;
 
     public function __invoke(RequestEnvironmentInterface $requestEnvironment): StagePointer|null
@@ -91,6 +95,9 @@ class Router implements RouterInterface
     }
 
     /**
+     * @param array<string, mixed> $attributes
+     * @return array<string, mixed>
+     *
      * @throws ParseException
      * @throws DependencyNotFound
      * @throws UnexpectedValueType
@@ -232,6 +239,8 @@ class Router implements RouterInterface
     }
 
     /**
+     * @return array<string, mixed>
+     *
      * @throws ParseException
      */
     protected function parseParameters(HttpRequestInterface $httpRequest): array

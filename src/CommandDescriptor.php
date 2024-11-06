@@ -8,10 +8,19 @@ use IfCastle\ServiceManager\CommandDescriptorInterface;
 
 class CommandDescriptor implements CommandDescriptorInterface
 {
+    /**
+     * @var array<string, mixed>|null
+     */
     protected array|null $parameters = null;
 
+    /**
+     * @var callable():array<string, mixed>|null
+     */
     protected mixed $extractParameters = null;
 
+    /**
+     * @param callable():array<string, mixed> $extractParameters
+     */
     public function __construct(
         public readonly string $serviceName,
         public readonly string $methodName,

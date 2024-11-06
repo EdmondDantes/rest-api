@@ -10,6 +10,13 @@ use IfCastle\TypeDefinitions\FunctionDescriptorInterface;
 
 interface ExtractParameterInterface
 {
+    /**
+     * Extract a parameter from the raw parameters.
+     *
+     * @param array<string, mixed>        $rawParameters
+     * @param array<string, mixed>        $routeParameters
+     *
+     */
     public function extractParameter(DefinitionInterface         $parameter,
         FunctionDescriptorInterface $methodDescriptor,
         array                       $rawParameters,

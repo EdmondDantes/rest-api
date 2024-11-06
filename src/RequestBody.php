@@ -10,6 +10,9 @@ use IfCastle\TypeDefinitions\NativeSerialization\AttributeNameInterface;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final readonly class RequestBody implements AttributeNameInterface
 {
+    /**
+     * @param string[] $mimeTypes
+     */
     public function __construct(
         public array $mimeTypes = [],
     ) {}

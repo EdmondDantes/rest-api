@@ -91,8 +91,8 @@ class RouteCollectionBuilder
             $requirements           = \array_merge($groupRoute->getRequirements(), $requirements);
             $options                = \array_merge($groupRoute->getOptions(), $options);
             $host                   = $groupRoute->getHost() ?? $host;
-            $schemes                = $groupRoute->getSchemes() ?? $schemes;
-            $methods                = $groupRoute->getMethods() ?? $methods;
+            $schemes                = $groupRoute->getSchemes() !== [] ? $groupRoute->getSchemes() : $schemes;
+            $methods                = $groupRoute->getMethods() !== [] ? $groupRoute->getMethods() : $methods;
             $condition              = $groupRoute->getCondition() ?? $condition;
         }
 

@@ -10,9 +10,9 @@ use IfCastle\Exceptions\ClientAvailableInterface;
 use IfCastle\Exceptions\LogicalException;
 use IfCastle\Exceptions\UnexpectedValueType;
 use IfCastle\Protocol\ContentTypeAwareInterface;
+use IfCastle\Protocol\Exceptions\HttpErrorInterface;
+use IfCastle\Protocol\Exceptions\HttpException;
 use IfCastle\Protocol\HeadersInterface;
-use IfCastle\Protocol\Http\Exceptions\HttpErrorInterface;
-use IfCastle\Protocol\Http\Exceptions\HttpException;
 use IfCastle\Protocol\Http\HttpResponseMutableInterface;
 use IfCastle\TypeDefinitions\NativeSerialization\ArraySerializableInterface;
 use IfCastle\TypeDefinitions\ResultInterface;
@@ -84,6 +84,9 @@ class ResponseDefaultStrategy
         $response->setBody($result);
     }
 
+    /**
+     * @throws HttpException
+     */
     protected function resolveResult(mixed $result): mixed
     {
         if ($result instanceof ResultInterface) {
@@ -117,6 +120,8 @@ class ResponseDefaultStrategy
     }
 
     /**
+     * @param array<mixed> $result
+     *
      * @throws \JsonException
      */
     protected function encodeResult(array $result): string
@@ -144,11 +149,19 @@ class ResponseDefaultStrategy
         $response->setBody($this->encodeError($errorContainer, $response));
     }
 
+    /**
+     * @param array<mixed> $error
+     *
+     * @return array<mixed>
+     */
     protected function errorContainer(array $error): array
     {
         return $error;
     }
 
+    /**
+     * @param array<mixed> $errorContainer
+     */
     protected function encodeError(array $errorContainer, HttpResponseMutableInterface $response): string
     {
         try {
