@@ -29,7 +29,7 @@ class ErrorDefaultStrategy
             $requestEnvironment->defineResponse($response);
         }
 
-        $resultContainer            = $requestEnvironment->findDependency(ResultInterface::class);
+        $resultContainer            = $requestEnvironment->findDependency(ResultInterface::class, returnThrowable: true);
 
         if ($resultContainer instanceof ResultInterface && ($error = $resultContainer->getError()) !== null) {
             $requestEnvironment->findDependency(LoggerInterface::class)?->error($error);

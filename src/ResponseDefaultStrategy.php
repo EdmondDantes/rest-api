@@ -34,7 +34,7 @@ class ResponseDefaultStrategy
             return;
         }
 
-        $resultContainer            = $requestEnvironment->findDependency(ResultInterface::class);
+        $resultContainer            = $requestEnvironment->findDependency(ResultInterface::class, returnThrowable: true);
 
         if (false === $resultContainer instanceof ResultInterface) {
             throw new LogicalException('ResultInterface is not found in RequestEnvironment or is not an instance of ResultInterface');
