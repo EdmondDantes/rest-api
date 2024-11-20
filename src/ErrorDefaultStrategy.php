@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IfCastle\RestApi;
 
+use IfCastle\Application\Console\ConsoleLoggerInterface;
 use IfCastle\Application\RequestEnvironment\RequestEnvironmentInterface;
 use IfCastle\Protocol\HeadersInterface;
 use IfCastle\Protocol\Http\HttpResponseMutableInterface;
@@ -33,6 +34,10 @@ class ErrorDefaultStrategy
 
         if ($resultContainer instanceof ResultInterface && ($error = $resultContainer->getError()) !== null) {
             $requestEnvironment->findDependency(LoggerInterface::class)?->error($error);
+            $requestEnvironment->findDependency(ConsoleLoggerInterface::class)?->error($error);
+        } elseif ($resultContainer instanceof \Throwable) {
+            $requestEnvironment->findDependency(LoggerInterface::class)?->error($resultContainer);
+            $requestEnvironment->findDependency(ConsoleLoggerInterface::class)?->error($resultContainer);
         }
     }
 }
