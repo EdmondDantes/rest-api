@@ -32,8 +32,9 @@
         }
     },
     "require": {
-        "ifcastle/application": "^0.7",
-        "ifcastle/protocol-contracts": "^0.6",
+        "php": "^8.4",
+        "ifcastle/application": "^0.8",
+        "ifcastle/protocol-contracts": "^0.7",
         "symfony/routing": "^7.1"
     },
     "require-dev": {
